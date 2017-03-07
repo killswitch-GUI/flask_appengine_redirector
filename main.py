@@ -8,7 +8,7 @@ import json
 # STATIC VAR
 __DEBUG = bool(os.environ.get('DEBUG', True))
 __FORWARD_DOMAIN = str(os.environ.get('FORWARD_DOMAIN', 'cybersyndicates.com'))
-__CURRENT_DOMAIN = str(os.environ.get('CURRENT_DOMAIN', 'mineral-highway-136423.appspot.com'))
+__CURRENT_DOMAIN = str(os.environ.get('CURRENT_DOMAIN', 'localhost:8080'))
 
 ###############################
 #         CUSTOM DEBUG        #
@@ -71,11 +71,11 @@ def proxy_required(func):
         try:
             if __DEBUG:
                 debug_req.print_request(request)
-                print request.url.replace('tranquil-dawn-50102.herokuapp.com', __FORWARD_DOMAIN)
+                print request.url.replace(__CURRENT_DOMAIN, __FORWARD_DOMAIN)
             # setup our proxy for C2
             resp = requests.request(
                 method=request.method,
-                url=request.url.replace('tranquil-dawn-50102.herokuapp.com', __FORWARD_DOMAIN),
+                url=request.url.replace(__CURRENT_DOMAIN, __FORWARD_DOMAIN),
                 headers={key: value for (key, value) in request.headers if key != 'Host'},
                 data=request.get_data(),
                 cookies=request.cookies,
@@ -88,8 +88,10 @@ def proxy_required(func):
             return response
             if not response:
                 # FORWARD RESPONSE TO SERVER
+                print "failed to get resource"
                 return func(*args, **kwargs)
-        except:
+        except Exception as e:
+            print e
             return make_response(jsonify({'error': 'somthing went wrong (contact admin)'}), 400)
     return wrapper
 

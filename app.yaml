@@ -2,6 +2,12 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+
 handlers:
 - url: /.*
   script: main.app
+
+env_variables:
+  DEBUG: True
+  #FORWARD_DOMAIN: 'cybersyndicates.com'
+  #CURRENT_DOMAIN: 'mineral-highway-136423.appspot.com'
