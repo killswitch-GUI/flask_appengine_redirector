@@ -8,7 +8,7 @@ import json
 # STATIC VAR
 __DEBUG = bool(os.environ.get('DEBUG', True))
 __FORWARD_DOMAIN = str(os.environ.get('FORWARD_DOMAIN', 'cybersyndicates.com'))
-__CURRENT_DOMAIN = str(os.environ.get('CURRENT_DOMAIN', 'localhost:8080'))
+__CURRENT_DOMAIN = str(os.environ.get('CURRENT_DOMAIN', 'mineral-highway-136423.appspot.com'))
 
 ###############################
 #         CUSTOM DEBUG        #
@@ -86,12 +86,7 @@ def proxy_required(func):
             response = Response(resp.content, resp.status_code, headers)
             print "proxy response: %s" % (response)
             return response
-            if not response:
-                # FORWARD RESPONSE TO SERVER
-                print "failed to get resource"
-                return func(*args, **kwargs)
-        except Exception as e:
-            print e
+        except:
             return make_response(jsonify({'error': 'somthing went wrong (contact admin)'}), 400)
     return wrapper
 

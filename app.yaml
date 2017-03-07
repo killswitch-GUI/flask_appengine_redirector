@@ -9,5 +9,5 @@ handlers:
 
 env_variables:
   DEBUG: True
-  #FORWARD_DOMAIN: 'cybersyndicates.com'
-  #CURRENT_DOMAIN: 'mineral-highway-136423.appspot.com'
+  FORWARD_DOMAIN: 'cybersyndicates.com'
+  CURRENT_DOMAIN: 'mineral-highway-136423.appspot.com'

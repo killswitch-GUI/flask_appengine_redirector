@@ -1,5 +1,11 @@
-from __future__ import absolute_import
+# urllib3/filepost.py
+# Copyright 2008-2013 Andrey Petrov and contributors (see CONTRIBUTORS.txt)
+#
+# This module is part of urllib3 and is released under
+# the MIT License: http://www.opensource.org/licenses/mit-license.php
+
 import codecs
+import mimetypes
 
 from uuid import uuid4
 from io import BytesIO
@@ -13,7 +19,7 @@ writer = codecs.lookup('utf-8')[3]
 
 def choose_boundary():
     """
-    Our embarrassingly-simple replacement for mimetools.choose_boundary.
+    Our embarassingly-simple replacement for mimetools.choose_boundary.
     """
     return uuid4().hex
 
@@ -32,10 +38,10 @@ def iter_field_objects(fields):
         i = iter(fields)
 
     for field in i:
-        if isinstance(field, RequestField):
-            yield field
-        else:
-            yield RequestField.from_tuples(*field)
+      if isinstance(field, RequestField):
+        yield field
+      else:
+        yield RequestField.from_tuples(*field)
 
 
 def iter_fields(fields):

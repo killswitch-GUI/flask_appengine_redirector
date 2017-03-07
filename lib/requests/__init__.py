@@ -6,14 +6,14 @@
 #          /
 
 """
-Requests HTTP library
+requests HTTP library
 ~~~~~~~~~~~~~~~~~~~~~
 
 Requests is an HTTP library, written in Python, for human beings. Basic GET
 usage:
 
    >>> import requests
-   >>> r = requests.get('https://www.python.org')
+   >>> r = requests.get('http://python.org')
    >>> r.status_code
    200
    >>> 'Python is a programming language' in r.content
@@ -22,7 +22,7 @@ usage:
 ... or POST:
 
    >>> payload = dict(key1='value1', key2='value2')
-   >>> r = requests.post('http://httpbin.org/post', data=payload)
+   >>> r = requests.post("http://httpbin.org/post", data=payload)
    >>> print(r.text)
    {
      ...
@@ -36,16 +36,17 @@ usage:
 The other HTTP methods are supported - see `requests.api`. Full documentation
 is at <http://python-requests.org>.
 
-:copyright: (c) 2016 by Kenneth Reitz.
+:copyright: (c) 2014 by Kenneth Reitz.
 :license: Apache 2.0, see LICENSE for more details.
+
 """
 
 __title__ = 'requests'
-__version__ = '2.12.2'
-__build__ = 0x021202
+__version__ = '2.3.0'
+__build__ = 0x020300
 __author__ = 'Kenneth Reitz'
 __license__ = 'Apache 2.0'
-__copyright__ = 'Copyright 2016 Kenneth Reitz'
+__copyright__ = 'Copyright 2014 Kenneth Reitz'
 
 # Attempt to enable urllib3's SNI support, if possible
 try:
@@ -54,12 +55,6 @@ try:
 except ImportError:
     pass
 
-import warnings
-
-# urllib3's DependencyWarnings should be silenced.
-from .packages.urllib3.exceptions import DependencyWarning
-warnings.simplefilter('ignore', DependencyWarning)
-
 from . import utils
 from .models import Request, Response, PreparedRequest
 from .api import request, get, head, post, patch, put, delete, options
@@ -67,8 +62,7 @@ from .sessions import session, Session
 from .status_codes import codes
 from .exceptions import (
     RequestException, Timeout, URLRequired,
-    TooManyRedirects, HTTPError, ConnectionError,
-    FileModeWarning, ConnectTimeout, ReadTimeout
+    TooManyRedirects, HTTPError, ConnectionError
 )
 
 # Set default logging handler to avoid "No handler found" warnings.
@@ -81,6 +75,3 @@ except ImportError:
             pass
 
 logging.getLogger(__name__).addHandler(NullHandler())
-
-# FileModeWarnings go off per the default.
-warnings.simplefilter('default', FileModeWarning, append=True)

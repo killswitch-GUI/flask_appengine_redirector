@@ -1,4 +1,9 @@
-from __future__ import absolute_import
+# urllib3/fields.py
+# Copyright 2008-2013 Andrey Petrov and contributors (see CONTRIBUTORS.txt)
+#
+# This module is part of urllib3 and is released under
+# the MIT License: http://www.opensource.org/licenses/mit-license.php
+
 import email.utils
 import mimetypes
 
@@ -36,11 +41,11 @@ def format_header_param(name, value):
         result = '%s="%s"' % (name, value)
         try:
             result.encode('ascii')
-        except (UnicodeEncodeError, UnicodeDecodeError):
+        except UnicodeEncodeError:
             pass
         else:
             return result
-    if not six.PY3 and isinstance(value, six.text_type):  # Python 2:
+    if not six.PY3:  # Python 2:
         value = value.encode('utf-8')
     value = email.utils.encode_rfc2231(value, 'utf-8')
     value = '%s*=%s' % (name, value)
@@ -73,10 +78,9 @@ class RequestField(object):
         """
         A :class:`~urllib3.fields.RequestField` factory from old-style tuple parameters.
 
-        Supports constructing :class:`~urllib3.fields.RequestField` from
-        parameter of key/value strings AND key/filetuple. A filetuple is a
-        (filename, data, MIME type) tuple where the MIME type is optional.
-        For example::
+        Supports constructing :class:`~urllib3.fields.RequestField` from parameter
+        of key/value strings AND key/filetuple. A filetuple is a (filename, data, MIME type)
+        tuple where the MIME type is optional. For example: ::
 
             'foo': 'bar',
             'fakefile': ('foofile.txt', 'contents of foofile'),
@@ -121,8 +125,8 @@ class RequestField(object):
         'Content-Disposition' fields.
 
         :param header_parts:
-            A sequence of (k, v) typles or a :class:`dict` of (k, v) to format
-            as `k1="v1"; k2="v2"; ...`.
+            A sequence of (k, v) typles or a :class:`dict` of (k, v) to format as
+            `k1="v1"; k2="v2"; ...`.
         """
         parts = []
         iterable = header_parts
@@ -130,7 +134,7 @@ class RequestField(object):
             iterable = header_parts.items()
 
         for name, value in iterable:
-            if value is not None:
+            if value:
                 parts.append(self._render_part(name, value))
 
         return '; '.join(parts)
@@ -154,8 +158,7 @@ class RequestField(object):
         lines.append('\r\n')
         return '\r\n'.join(lines)
 
-    def make_multipart(self, content_disposition=None, content_type=None,
-                       content_location=None):
+    def make_multipart(self, content_disposition=None, content_type=None, content_location=None):
         """
         Makes this request field into a multipart request field.
 
@@ -169,10 +172,6 @@ class RequestField(object):
 
         """
         self.headers['Content-Disposition'] = content_disposition or 'form-data'
-        self.headers['Content-Disposition'] += '; '.join([
-            '', self._render_parts(
-                (('name', self._name), ('filename', self._filename))
-            )
-        ])
+        self.headers['Content-Disposition'] += '; '.join(['', self._render_parts((('name', self._name), ('filename', self._filename)))])
         self.headers['Content-Type'] = content_type
         self.headers['Content-Location'] = content_location
